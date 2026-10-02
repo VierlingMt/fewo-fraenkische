@@ -38,18 +38,21 @@ jobs:
             if [ -z "${!v}" ]; then echo "::error::Secret für $v fehlt"; exit 1; fi
           done
           [[ "$DEPTH" =~ ^[0-9]+$ ]] || { echo "::error::depth muss eine Zahl sein"; exit 1; }
+          [[ "$INSPECT_PATH" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "::error::path darf nur A-Z, 0-9, . _ / - enthalten"; exit 1; }
+          # lftp zählt den Startordner selbst als Ebene 1
+          FIND_DEPTH=$((DEPTH + 1))
 
           lftp -u "$FTP_USERNAME" --env-password "$FTP_SERVER" -e "
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set net:max-retries 2;
             set net:timeout 20;
-            cd \"$INSPECT_PATH\";
+            cd $INSPECT_PATH || exit 1;
             echo '=== Inhalt von $INSPECT_PATH (mit Größe/Datum) ===';
             cls -l --sort=name;
             echo '';
             echo '=== Ordnerbaum, Tiefe $DEPTH ===';
-            find --maxdepth=$DEPTH .;
+            find --maxdepth=$FIND_DEPTH .;
             bye" | tee listing.txt
 
           {
