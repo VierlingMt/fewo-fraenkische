@@ -19,7 +19,6 @@ eintraege:
     text: Noch einmal in die Pedale treten – oben angekommen wartet ein grandioser Blick über die Felslandschaft. Die Fränkische Schweiz ist ein echtes Mountainbike-Revier.
   - name: Kanufahren auf der Wiesent
     text: Auf einer Bootstour durch das idyllische Wiesenttal paddeln Sie an einigen der schönsten Sehenswürdigkeiten der Region vorbei und genießen die Aussicht vom Wasser aus.
-    bild: dampfbahn.jpg
   - name: Fahrradverleih in Ebermannstadt
     text: In Ebermannstadt gibt es drei Möglichkeiten, Räder zu leihen oder reparieren zu lassen. Eine Übersicht hat die Stadt Ebermannstadt zusammengestellt.
     url: https://www.ebermannstadt.de/freizeit-tourismus/radfahren-und-mountainbiken/
