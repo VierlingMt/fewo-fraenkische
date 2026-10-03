@@ -63,10 +63,12 @@ h3 {
   line-height: 1.12;
   color: var(--c-text);
   margin: 0 0 0.5em;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 h1 {
-  font-size: clamp(2.2rem, 3.6vw + 1rem, 3.8rem);
+  font-size: clamp(1.9rem, 3.6vw + 1rem, 3.8rem);
 }
 
 h2 {
@@ -260,6 +262,8 @@ h3 {
 
 .prose {
   max-width: 72ch;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .prose h2 {

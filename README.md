@@ -25,7 +25,10 @@ npm install
 npm run news   # Regional-News abrufen (optional)
 npm run dev    # http://localhost:4321
 npm run build  # fertige Seite in dist/
+npm test       # Playwright-Tests (5 Smartphones, 2 Tablets, 2 Desktops) gegen dist/
 ```
+
+Die Tests laufen auch bei jedem Push im Deploy-Workflow, bevor hochgeladen wird.
 
 ## Deploy
 
