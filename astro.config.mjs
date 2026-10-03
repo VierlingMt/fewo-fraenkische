@@ -6,6 +6,9 @@ export default defineConfig({
   // Beim Go-live auf die endgültige Domain umstellen (oder per SITE_URL setzen).
   site: process.env.SITE_URL ?? 'https://neu.fewo-ebermannstadt.de',
   trailingSlash: 'always',
+  redirects: {
+    '/news/': '/veranstaltungen/',
+  },
   build: {
     format: 'directory',
   },

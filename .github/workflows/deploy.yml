@@ -47,6 +47,10 @@ jobs:
         run: npm run news
         continue-on-error: true
 
+      - name: Veranstaltungen abrufen
+        run: npm run events
+        continue-on-error: true
+
       - run: npm run check
 
       - run: npm run build

@@ -23,6 +23,6 @@ export const SITE = {
 export const NAV = [
   { href: '/', label: 'Start' },
   { href: '/ferienwohnungen/', label: 'Ferienwohnungen' },
-  { href: '/news/', label: 'News & Tipps' },
+  { href: '/veranstaltungen/', label: 'Veranstaltungen' },
   { href: '/kontakt/', label: 'Kontakt' },
 ];

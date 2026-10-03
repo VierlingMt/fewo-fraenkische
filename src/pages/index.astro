@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import WohnungCard from '../components/WohnungCard.astro';
-import NewsCard from '../components/NewsCard.astro';
+import EventList from '../components/EventList.astro';
 import FeedList from '../components/FeedList.astro';
-import { getPublishedNews, getWohnungen } from '../lib/news';
+import { getWohnungen } from '../lib/news';
+import { getEvents } from '../lib/events';
 import { getFeedItems } from '../lib/feed';
 import { getFotos } from '../lib/fotos';
 import { SITE } from '../config';
@@ -11,7 +12,10 @@ import { Image, Picture } from 'astro:assets';
 import regionImg from '../assets/burgruine-neideck.jpg';
 
 const wohnungen = await getWohnungen();
-const posts = (await getPublishedNews()).slice(0, 3);
+// Auf der Startseite nur Termine in direkter Nähe
+const events = getEvents()
+  .filter((e) => e.distanceKm !== null && e.distanceKm <= 12)
+  .slice(0, 8);
 const feed = getFeedItems(8);
 const heroFoto = wohnungen.map((w) => getFotos(w.id)[0]).find(Boolean);
 
@@ -132,7 +136,7 @@ const jsonLd = [
           Felsen, Burgen und Höhlen, zahlreiche kleine Brauereien und ein dichtes Netz an Wander- und Radwegen
           machen die Region zu einem der schönsten Ferienziele in Bayern.
         </p>
-        <a class="btn btn--light" href="/news/">Ausflugstipps entdecken</a>
+        <a class="btn btn--light" href="/veranstaltungen/">Veranstaltungen entdecken</a>
       </div>
     </div>
   </section>
@@ -142,20 +146,18 @@ const jsonLd = [
       <div>
         <div class="section__head">
           <div>
-            <p class="eyebrow">Unsere Tipps</p>
-            <h2>Tipps & Neuigkeiten</h2>
+            <p class="eyebrow">Was ist los?</p>
+            <h2>Veranstaltungen in der Nähe</h2>
           </div>
-          <a class="more" href="/news/">Alle Beiträge</a>
+          <a class="more" href="/veranstaltungen/">Alle Termine</a>
         </div>
-        <div class="grid">
-          {posts.map((p) => <NewsCard post={p} />)}
-        </div>
+        <EventList events={events} />
       </div>
       <aside aria-labelledby="region-news">
         <div class="section__head">
           <div>
             <p class="eyebrow">Automatisch aktualisiert</p>
-            <h2 id="region-news">Aus der Region</h2>
+            <h2 id="region-news">News aus der Region</h2>
           </div>
         </div>
         <FeedList items={feed} />

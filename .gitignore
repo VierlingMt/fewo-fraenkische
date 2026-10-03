@@ -5,3 +5,4 @@ dist/
 .env.*
 # wird beim Build aus RSS-Feeds erzeugt
 src/data/news-feed.json
+src/data/events.json

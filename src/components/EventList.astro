@@ -1,0 +1,194 @@
+---
+import { groupByDate, formatDay, EVENTS_SOURCE, type EventItem } from '../lib/events';
+
+interface Props {
+  events: EventItem[];
+  filter?: boolean;
+}
+
+const { events, filter = false } = Astro.props;
+const days = groupByDate(events);
+---
+
+<div class="events" data-events>
+  {
+    filter && events.length > 0 && (
+      <div class="events__filter" role="group" aria-label="Umkreis">
+        <span class="meta">Umkreis um Ebermannstadt:</span>
+        <button type="button" class="pill" data-radius="5">bis 5 km</button>
+        <button type="button" class="pill" data-radius="10">bis 10 km</button>
+        <button type="button" class="pill is-active" data-radius="99">bis 20 km</button>
+      </div>
+    )
+  }
+
+  {
+    days.length === 0 ? (
+      <p class="meta">Aktuell liegen keine Termine vor.</p>
+    ) : (
+      days.map((day) => (
+        <section class="day" data-date={day.date}>
+          <h3 class="day__title">{formatDay(day.date)}</h3>
+          <ul class="day__list">
+            {day.items.map((e) => (
+              <li class="event" data-km={e.distanceKm ?? ''}>
+                <span class="event__time">{e.time || 'ganztägig'}</span>
+                <span class="event__body">
+                  <a href={e.link} target="_blank" rel="noopener" class="event__title">
+                    {e.title}
+                  </a>
+                  <span class="event__place">
+                    {e.place}
+                    {e.distanceKm !== null && e.distanceKm > 0 && <> · {e.distanceKm} km</>}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    )
+  }
+
+  {
+    events.length > 0 && (
+      <p class="meta source">
+        Quelle: <a href={EVENTS_SOURCE.url} target="_blank" rel="noopener">{EVENTS_SOURCE.name}</a> – alle Angaben
+        ohne Gewähr, Details beim Veranstalter.
+      </p>
+    )
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-events]').forEach((root) => {
+    // Vergangene Tage ausblenden (die Seite wird nur mehrmals täglich neu gebaut)
+    const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Berlin' }).format(new Date());
+    root.querySelectorAll<HTMLElement>('.day').forEach((day) => {
+      if ((day.dataset.date ?? '') < today) day.remove();
+    });
+
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-radius]');
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const max = Number(btn.dataset.radius);
+        buttons.forEach((b) => b.classList.toggle('is-active', b === btn));
+        root.querySelectorAll<HTMLElement>('.event').forEach((ev) => {
+          const km = ev.dataset.km === '' ? null : Number(ev.dataset.km);
+          ev.hidden = max < 99 && (km === null || km > max);
+        });
+        root.querySelectorAll<HTMLElement>('.day').forEach((day) => {
+          day.hidden = !day.querySelector('.event:not([hidden])');
+        });
+      }),
+    );
+  });
+</script>
+
+<style>
+  .events__filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .pill {
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--c-line);
+    background: var(--c-surface);
+    color: var(--c-text);
+    cursor: pointer;
+  }
+
+  .pill.is-active {
+    background: var(--c-dark);
+    border-color: var(--c-dark);
+    color: #fff;
+  }
+
+  .day {
+    background: var(--c-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px 8px;
+    margin-bottom: 16px;
+  }
+
+  .day__title {
+    font-size: 1.05rem;
+    margin: 0 0 8px;
+    color: var(--c-accent);
+  }
+
+  .day__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .event {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .event:first-child {
+    border-top: 0;
+  }
+
+  .event[hidden],
+  .day[hidden] {
+    display: none;
+  }
+
+  .event__time {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--c-text);
+  }
+
+  .event__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .event__title {
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--c-text);
+    line-height: 1.4;
+  }
+
+  .event__title:hover {
+    color: var(--c-accent);
+    text-decoration: underline;
+  }
+
+  .event__place {
+    font-size: 0.9rem;
+    color: var(--c-muted);
+  }
+
+  .source {
+    margin-top: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .day {
+      padding: 16px 16px 4px;
+    }
+
+    .event {
+      grid-template-columns: 4.2rem minmax(0, 1fr);
+      gap: 8px;
+    }
+  }
+</style>

@@ -47,10 +47,10 @@ Auf unseren Seiten verlinken wir auf Buchungsportale wie Booking.com. Erst wenn 
 anklicken, verlassen Sie unsere Website. Für die Datenverarbeitung auf diesen Portalen ist der jeweilige
 Anbieter verantwortlich; es gelten dessen Datenschutzhinweise.
 
-## 6. Externe Links und Nachrichten aus der Region
+## 6. Externe Links, Veranstaltungen und Nachrichten aus der Region
 
-Im Bereich „Aus der Region“ zeigen wir Schlagzeilen anderer Websites mit einem Link zur Quelle. Die Schlagzeilen
-werden beim Erstellen unserer Website abgerufen. Beim bloßen Besuch unserer Seite werden dabei keine Daten an
+In den Bereichen „Veranstaltungen“ und „News aus der Region“ zeigen wir Termine und Schlagzeilen anderer Websites
+mit einem Link zur Quelle. Diese Angaben werden beim Erstellen unserer Website abgerufen. Beim bloßen Besuch unserer Seite werden dabei keine Daten an
 die Quellen übermittelt. Erst wenn Sie einen Link anklicken, gelangen Sie auf die Website des jeweiligen
 Anbieters.
 

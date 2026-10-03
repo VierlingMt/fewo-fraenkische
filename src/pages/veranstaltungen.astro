@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import EventList from '../components/EventList.astro';
+import NewsCard from '../components/NewsCard.astro';
+import FeedList from '../components/FeedList.astro';
+import { getEvents } from '../lib/events';
+import { getPublishedNews } from '../lib/news';
+import { getFeedItems } from '../lib/feed';
+
+const events = getEvents();
+const posts = await getPublishedNews();
+const feed = getFeedItems(20);
+---
+
+<Base
+  title="Veranstaltungen rund um Ebermannstadt"
+  description="Feste, Kirchweihen, Führungen, Konzerte und Märkte in der Fränkischen Schweiz – alle Veranstaltungen im Umkreis von Ebermannstadt, täglich aktualisiert."
+>
+  <section class="section section--white intro">
+    <div class="container">
+      <p class="eyebrow">Fränkische Schweiz</p>
+      <h1>Veranstaltungen rund um Ebermannstadt</h1>
+      <p class="lead">
+        Kirchweih, Führungen, Märkte, Konzerte und Feste – hier finden Sie alle Termine der nächsten Wochen im
+        Umkreis von rund 20 km um unsere Ferienwohnungen. Mehrmals täglich aktualisiert.
+      </p>
+      <nav class="jump" aria-label="Auf dieser Seite">
+        <a href="#termine" class="chip">Termine</a>
+        {posts.length > 0 && <a href="#tipps" class="chip">Unsere Ausflugstipps</a>}
+        <a href="#news" class="chip">News aus der Region</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section" id="termine">
+    <div class="container layout">
+      <div>
+        <EventList events={events} filter />
+      </div>
+      <aside class="side">
+        {
+          posts.length > 0 && (
+            <div id="tipps">
+              <p class="eyebrow">Von uns empfohlen</p>
+              <h2>Ausflugstipps</h2>
+              <div class="stack">
+                {posts.map((p) => (
+                  <NewsCard post={p} />
+                ))}
+              </div>
+            </div>
+          )
+        }
+        <div id="news">
+          <p class="eyebrow">Automatisch aktualisiert</p>
+          <h2>News aus der Region</h2>
+          <FeedList items={feed} />
+          <p class="meta">Schlagzeilen externer Quellen. Für die Inhalte sind die jeweiligen Anbieter verantwortlich.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: 40px;
+  }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .jump a {
+    text-decoration: none;
+  }
+
+  .layout {
+    display: grid;
+    gap: 48px;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (min-width: 1000px) {
+    .layout {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    }
+  }
+
+  .side {
+    display: grid;
+    gap: 48px;
+  }
+
+  .side h2 {
+    font-size: 1.6rem;
+  }
+
+  .stack {
+    display: grid;
+    gap: 16px;
+  }
+</style>
