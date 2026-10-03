@@ -8,7 +8,7 @@ interface Props {
 const { wohnung } = Astro.props;
 const d = wohnung.data;
 const facts = [
-  d.personen && `bis ${d.personen} Personen`,
+  d.personen && (d.personenMin ? `${d.personenMin}–${d.personen} Personen` : `bis ${d.personen} Personen`),
   d.schlafzimmer && `${d.schlafzimmer} Schlafzimmer`,
   d.groesse && `${d.groesse} m²`,
 ].filter(Boolean);

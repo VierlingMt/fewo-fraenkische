@@ -2,6 +2,7 @@
 title: Waldrand Idyll
 teaser: Moderne, gemütliche Ferienwohnung am Waldrand von Ebermannstadt (Baujahr 2022) – ruhig gelegen, Spielplatz und Innenstadt in Laufweite.
 order: 1
+personenMin: 2
 personen: 4
 schlafzimmer: 1
 ausstattung:

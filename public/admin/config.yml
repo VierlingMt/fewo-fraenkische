@@ -46,6 +46,7 @@ collections:
       - { name: title, label: Name, widget: string }
       - { name: teaser, label: Kurzbeschreibung, widget: text }
       - { name: order, label: Reihenfolge, widget: number, value_type: int }
+      - { name: personenMin, label: Min. Personen, widget: number, value_type: int, required: false }
       - { name: personen, label: Max. Personen, widget: number, value_type: int, required: false }
       - { name: schlafzimmer, label: Schlafzimmer, widget: number, value_type: int, required: false }
       - { name: groesse, label: Größe (m²), widget: number, value_type: int, required: false }

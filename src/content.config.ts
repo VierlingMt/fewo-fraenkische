@@ -8,6 +8,7 @@ const wohnungen = defineCollection({
     title: z.string(),
     teaser: z.string(),
     order: z.number().default(0),
+    personenMin: z.number().optional(),
     personen: z.number().optional(),
     schlafzimmer: z.number().optional(),
     groesse: z.number().optional(),

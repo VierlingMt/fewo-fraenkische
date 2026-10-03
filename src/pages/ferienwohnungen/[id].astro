@@ -14,7 +14,7 @@ const d = wohnung.data;
 const { Content } = await render(wohnung);
 
 const facts = [
-  d.personen && ['Personen', `bis ${d.personen}`],
+  d.personen && ['Personen', d.personenMin ? `${d.personenMin}–${d.personen}` : `bis ${d.personen}`],
   d.schlafzimmer && ['Schlafzimmer', String(d.schlafzimmer)],
   d.groesse && ['Größe', `${d.groesse} m²`],
   ['Preis', d.preisAb ? `ab ${d.preisAb} € / Nacht` : 'auf Anfrage'],
@@ -27,7 +27,9 @@ const jsonLd = {
   description: d.teaser,
   url: new URL(Astro.url.pathname, Astro.site).href,
   ...(d.bild && { image: new URL(d.bild, Astro.site).href }),
-  ...(d.personen && { occupancy: { '@type': 'QuantitativeValue', maxValue: d.personen } }),
+  ...(d.personen && {
+    occupancy: { '@type': 'QuantitativeValue', maxValue: d.personen, ...(d.personenMin && { minValue: d.personenMin }) },
+  }),
   ...(d.schlafzimmer && { numberOfBedrooms: d.schlafzimmer }),
   ...(d.groesse && { floorSize: { '@type': 'QuantitativeValue', value: d.groesse, unitCode: 'MTK' } }),
   amenityFeature: d.ausstattung.map((name) => ({ '@type': 'LocationFeatureSpecification', name, value: true })),
