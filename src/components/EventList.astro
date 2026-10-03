@@ -15,9 +15,9 @@ const days = groupByDate(events);
     filter && events.length > 0 && (
       <div class="events__filter" role="group" aria-label="Umkreis">
         <span class="meta">Umkreis um Ebermannstadt:</span>
-        <button type="button" class="pill" data-radius="5">bis 5 km</button>
+        <button type="button" class="pill is-active" data-radius="5">bis 5 km</button>
         <button type="button" class="pill" data-radius="10">bis 10 km</button>
-        <button type="button" class="pill is-active" data-radius="99">bis 20 km</button>
+        <button type="button" class="pill" data-radius="99">bis 20 km</button>
       </div>
     )
   }
@@ -69,19 +69,21 @@ const days = groupByDate(events);
     });
 
     const buttons = root.querySelectorAll<HTMLButtonElement>('[data-radius]');
-    buttons.forEach((btn) =>
-      btn.addEventListener('click', () => {
-        const max = Number(btn.dataset.radius);
-        buttons.forEach((b) => b.classList.toggle('is-active', b === btn));
-        root.querySelectorAll<HTMLElement>('.event').forEach((ev) => {
-          const km = ev.dataset.km === '' ? null : Number(ev.dataset.km);
-          ev.hidden = max < 99 && (km === null || km > max);
-        });
-        root.querySelectorAll<HTMLElement>('.day').forEach((day) => {
-          day.hidden = !day.querySelector('.event:not([hidden])');
-        });
-      }),
-    );
+    const apply = (btn: HTMLButtonElement) => {
+      const max = Number(btn.dataset.radius);
+      buttons.forEach((b) => b.classList.toggle('is-active', b === btn));
+      root.querySelectorAll<HTMLElement>('.event').forEach((ev) => {
+        const km = ev.dataset.km === '' ? null : Number(ev.dataset.km);
+        ev.hidden = max < 99 && (km === null || km > max);
+      });
+      root.querySelectorAll<HTMLElement>('.day').forEach((day) => {
+        day.hidden = !day.querySelector('.event:not([hidden])');
+      });
+    };
+    buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn)));
+    // Start mit dem vorausgewählten Umkreis (bis 5 km)
+    const initial = root.querySelector<HTMLButtonElement>('[data-radius].is-active');
+    if (initial) apply(initial);
   });
 </script>
 
