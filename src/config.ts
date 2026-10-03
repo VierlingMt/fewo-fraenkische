@@ -15,9 +15,8 @@ export const SITE = {
     street: 'Judenäcker 5',
     email: 'info@fewo-fraenkische.de',
   },
-  // Solange die Seite unter neu.… zum Testen läuft, nicht von Google indexieren lassen.
-  // Beim Go-live auf false stellen.
-  noindex: true,
+  // true = Seite für Suchmaschinen sperren (z. B. für eine Testumgebung)
+  noindex: false,
 };
 
 export const NAV = [

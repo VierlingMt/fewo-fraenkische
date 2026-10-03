@@ -1,0 +1,62 @@
+# Einmaliger Go-live: /www (alte Joomla-Seite) -> /www-old (gesperrt), /www-neu -> /www.
+# Start: GitHub → Actions → "Go-live: Ordner tauschen" → "Run workflow", Bestätigung "UMSTELLEN" eingeben.
+name: "Go-live: Ordner tauschen"
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Zur Bestätigung "UMSTELLEN" eingeben'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  switch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Bestätigung prüfen
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: '[ "$CONFIRM" = "UMSTELLEN" ] || { echo "::error::Bitte UMSTELLEN eingeben"; exit 1; }'
+
+      - name: lftp installieren
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Ordner tauschen
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          ftp() {
+            lftp -u "$FTP_USERNAME" --env-password "$FTP_SERVER" -e "
+              set ftp:ssl-force true; set ftp:ssl-protect-data true;
+              set net:max-retries 2; set net:timeout 20;
+              $1
+              bye"
+          }
+          listing=$(ftp "cls -1 /")
+          echo "$listing"
+          grep -qx 'www-neu/' <<<"$listing" || { echo "::error::/www-neu fehlt"; exit 1; }
+          grep -qx 'www/' <<<"$listing" || { echo "::error::/www fehlt"; exit 1; }
+          if grep -qx 'www-old/' <<<"$listing"; then echo "::error::/www-old existiert bereits"; exit 1; fi
+          ftp "cls -1 /www-neu/" | grep -qx 'index.html' || { echo "::error::/www-neu/index.html fehlt"; exit 1; }
+
+          # Alte Seite sperren: Joomla-.htaccess sichern und durch Sperre ersetzen
+          printf 'Require all denied\n' > deny.htaccess
+          ftp "mv /www/.htaccess /www/.htaccess-joomla; put deny.htaccess -o /www/.htaccess"
+
+          # Tauschen
+          ftp "mv /www /www-old; mv /www-neu /www"
+
+          echo "--- Ergebnis ---"
+          ftp "cls -1 /"
+          ftp "cls -1 /www/" | head -20
