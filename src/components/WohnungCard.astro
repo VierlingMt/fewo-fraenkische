@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { getFotos } from '../lib/fotos';
 
 interface Props {
   wohnung: CollectionEntry<'wohnungen'>;
@@ -7,6 +9,7 @@ interface Props {
 
 const { wohnung } = Astro.props;
 const d = wohnung.data;
+const titelbild = getFotos(wohnung.id)[0];
 const facts = [
   d.personen && (d.personenMin ? `${d.personenMin}–${d.personen} Personen` : `bis ${d.personen} Personen`),
   d.schlafzimmer && `${d.schlafzimmer} Schlafzimmer`,
@@ -15,13 +18,23 @@ const facts = [
 ---
 
 <article class="card">
-  {
-    d.bild ? (
-      <img src={d.bild} alt={d.bildAlt ?? d.title} loading="lazy" width="900" height="600" />
-    ) : (
-      <div class="placeholder-img">Foto folgt</div>
-    )
-  }
+  <a href={`/ferienwohnungen/${wohnung.id}/`} class="card__img" tabindex="-1" aria-hidden="true">
+    {
+      titelbild ? (
+        <Image
+          src={titelbild.src}
+          alt=""
+          widths={[400, 700, 1000]}
+          sizes="(min-width: 960px) 540px, 100vw"
+          format="webp"
+        />
+      ) : d.bild ? (
+        <img src={d.bild} alt="" loading="lazy" width="900" height="600" />
+      ) : (
+        <div class="placeholder-img">Foto folgt</div>
+      )
+    }
+  </a>
   <div class="card__body">
     <h3><a href={`/ferienwohnungen/${wohnung.id}/`}>{d.title}</a></h3>
     {facts.length > 0 && <p class="meta">{facts.join(' · ')}</p>}
@@ -41,7 +54,20 @@ const facts = [
     color: inherit;
   }
 
-  .price {
-    margin: 0;
+  .card__img {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .card__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .card__img:hover :global(img) {
+    transform: scale(1.03);
   }
 </style>

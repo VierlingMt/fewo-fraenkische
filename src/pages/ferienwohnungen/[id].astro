@@ -3,6 +3,9 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getWohnungen } from '../../lib/news';
 import { SITE } from '../../config';
+import { getImage } from 'astro:assets';
+import Galerie from '../../components/Galerie.astro';
+import { getFotos } from '../../lib/fotos';
 
 export async function getStaticPaths() {
   const wohnungen = await getWohnungen();
@@ -12,6 +15,11 @@ export async function getStaticPaths() {
 const { wohnung } = Astro.props;
 const d = wohnung.data;
 const { Content } = await render(wohnung);
+const fotos = getFotos(wohnung.id);
+const fotoUrls = await Promise.all(
+  fotos.map(async (f) => new URL((await getImage({ src: f.src, width: 1200, format: 'jpg' })).src, Astro.site).href),
+);
+const ogImage = fotoUrls[0] ?? d.bild;
 
 const facts = [
   d.personen && ['Personen', d.personenMin ? `${d.personenMin}–${d.personen}` : `bis ${d.personen}`],
@@ -26,7 +34,7 @@ const jsonLd = {
   name: `Ferienwohnung ${d.title}`,
   description: d.teaser,
   url: new URL(Astro.url.pathname, Astro.site).href,
-  ...(d.bild && { image: new URL(d.bild, Astro.site).href }),
+  ...(fotoUrls.length > 0 ? { image: fotoUrls } : d.bild && { image: new URL(d.bild, Astro.site).href }),
   ...(d.personen && {
     occupancy: { '@type': 'QuantitativeValue', maxValue: d.personen, ...(d.personenMin && { minValue: d.personenMin }) },
   }),
@@ -42,7 +50,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={`Ferienwohnung ${d.title}`} description={d.teaser} image={d.bild} jsonLd={jsonLd}>
+<Base title={`Ferienwohnung ${d.title}`} description={d.teaser} image={ogImage} jsonLd={jsonLd}>
   <section class="section">
     <div class="container">
       <p class="meta"><a href="/ferienwohnungen/">Ferienwohnungen</a> / {d.title}</p>
@@ -52,7 +60,9 @@ const jsonLd = {
       <div class="layout">
         <div>
           {
-            d.bild ? (
+            fotos.length > 0 ? (
+              <Galerie fotos={fotos} title={d.title} />
+            ) : d.bild ? (
               <img class="hero-img" src={d.bild} alt={d.bildAlt ?? d.title} width="1200" height="800" />
             ) : (
               <div class="placeholder-img hero-img">Fotos folgen</div>
