@@ -43,12 +43,12 @@ jobs:
               $1
               bye"
           }
-          listing=$(ftp "cls -1 /")
+          listing=$(ftp "cd /; cls -1")
           echo "$listing"
           grep -qx 'www-neu/' <<<"$listing" || { echo "::error::/www-neu fehlt"; exit 1; }
           grep -qx 'www/' <<<"$listing" || { echo "::error::/www fehlt"; exit 1; }
           if grep -qx 'www-old/' <<<"$listing"; then echo "::error::/www-old existiert bereits"; exit 1; fi
-          ftp "cls -1 /www-neu/" | grep -qx 'index.html' || { echo "::error::/www-neu/index.html fehlt"; exit 1; }
+          ftp "cd /www-neu; cls -1" | grep -qx 'index.html' || { echo "::error::/www-neu/index.html fehlt"; exit 1; }
 
           # Alte Seite sperren: Joomla-.htaccess sichern und durch Sperre ersetzen
           printf 'Require all denied\n' > deny.htaccess
@@ -58,5 +58,5 @@ jobs:
           ftp "mv /www /www-old; mv /www-neu /www"
 
           echo "--- Ergebnis ---"
-          ftp "cls -1 /"
-          ftp "cls -1 /www/" | head -20
+          ftp "cd /; cls -1"
+          ftp "cd /www; cls -1" | head -20
