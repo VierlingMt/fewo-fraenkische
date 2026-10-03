@@ -9,10 +9,12 @@ eintraege:
     ort: Ebermannstadt
     info: ca. 80 m von Waldrand Idyll
     text: Großer Kinderspielplatz mit Sport- und Bolzplatz, Fußballtor und Basketballkorb – direkt neben der Ferienwohnung Waldrand Idyll, nur den Fußweg hinunter.
+    maps: "Judenäcker, 91320 Ebermannstadt"
   - name: Spielplatz Diesbrunnen
     ort: Ebermannstadt
     info: ca. 800 m von Terrassenglück
     text: Der große, neue Kinderspielplatz ist von der Ferienwohnung Terrassenglück bequem durch die ruhigen Anwohnerstraßen zu Fuß erreichbar.
+    maps: "Diesbrunnenstraße, 91320 Ebermannstadt"
   - name: Wildpark Hundshaupten
     ort: Hundshaupten 62, 91349 Egloffstein
     info: ca. 10 km

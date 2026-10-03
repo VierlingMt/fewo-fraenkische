@@ -9,10 +9,12 @@ eintraege:
     ort: 91346 Wiesenttal
     text: Das Wahrzeichen der Fränkischen Schweiz. Schon in der Romantik haben Dichter und Maler die Ruine beschrieben und gemalt. Vom Neideckturm blicken Sie weit über das Wiesenttal bis hinüber zur Ruine Streitburg. Gelegentlich finden hier Theateraufführungen statt.
     url: https://www.wiesenttal.de
+    maps: "Burgruine Neideck, Wiesenttal"
   - name: Binghöhle Streitberg
     ort: Schauertal, 91346 Streitberg
     text: Eine der schönsten Tropfstein-Galeriehöhlen Deutschlands – ein Erlebnis bei jedem Wetter.
     url: https://www.binghoehle.de
+    maps: "Binghöhle, Streitberg"
   - name: Teufelshöhle Pottenstein
     ort: Schüttersmühle 5, 91278 Pottenstein
     text: Eine der schönsten und größten Tropfsteinhöhlen Bayerns. Ideal auch an Regentagen.

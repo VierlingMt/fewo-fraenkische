@@ -12,26 +12,32 @@ eintraege:
     info: Anfang Mai
     text: Über Kirchehrenbach erhebt sich weithin sichtbar der Tafelberg Walberla. Hier oben findet das urigste fränkische Bergfest statt.
     url: https://www.walberla.de
+    maps: "Walberla, Kirchehrenbach"
   - name: Annafest Forchheim
     ort: Kellerwald, Forchheim
     info: Ende Juli bis Anfang August
     text: Ein kühles Bier unter Eichen, zünftig schlemmen und ausgelassen feiern – das traditionelle Annafest im Kellerwald mit seiner einzigartigen Naturkulisse.
     url: https://www.annafest.bayern
+    maps: "Kellerwald, Forchheim"
   - name: Altstadtfest Ebermannstadt
     ort: Ebermannstadt
     text: Buntes Programm in der Altstadt, dazu regionale Weine, Bier und weitere Köstlichkeiten.
+    maps: "Marktplatz, 91320 Ebermannstadt"
   - name: EBSer Zeltkerwa
     ort: Ebermannstadt
     text: Die Kirchweih in Ebermannstadt mit Fahr- und Vergnügungsgeschäften, Imbissständen und Rahmenprogramm.
+    maps: false
   - name: Tag der offenen Brennerei
     ort: rund ums Walberla
     info: Oktober
     text: Zahlreiche Brennereien und Brauereien rund ums Walberla laden zu Hoffesten, Schaubrennen und Verkostungen ein – etwa in Gosberg, Kirchehrenbach, Leutenbach, Mittelehrenbach, Pretzfeld, Thuisbrunn und Weingarts.
     url: https://www.schnaps-brennerei.com
+    maps: false
   - name: Weihnachtsmarkt Ebermannstadt
     ort: Marktplatz Ebermannstadt
     info: Advent
     text: Weihnachtlich geschmückte Buden mit Kunsthandwerk und fränkischen Köstlichkeiten, Musik und Rahmenprogramm. Zum Aufwärmen laden die Gaststätten rund um den Marktplatz ein.
+    maps: "Marktplatz, 91320 Ebermannstadt"
 ---
 
 Neben den vielen Kirchweihen und kleinen Festen gibt es einige Höhepunkte, die Sie sich nicht entgehen

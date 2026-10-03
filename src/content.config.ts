@@ -34,6 +34,8 @@ const eintrag = z.object({
   ort: z.string().optional(),
   info: z.string().optional(),
   url: z.url().optional(),
+  // Suchbegriff für Google Maps; false = kein Kartenlink. Standard: "Name, Ort"
+  maps: z.union([z.string(), z.literal(false)]).optional(),
 });
 
 const region = defineCollection({
