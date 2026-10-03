@@ -37,7 +37,15 @@ const facts = [
   </a>
   <div class="card__body">
     <h3><a href={`/ferienwohnungen/${wohnung.id}/`}>{d.title}</a></h3>
-    {facts.length > 0 && <p class="meta">{facts.join(' · ')}</p>}
+    {
+      facts.length > 0 && (
+        <ul class="chips">
+          {facts.map((f) => (
+            <li class="chip">{f}</li>
+          ))}
+        </ul>
+      )
+    }
     <p>{d.teaser}</p>
     <p class="price">
       {d.preisAb ? <>ab <strong>{d.preisAb} €</strong> / Nacht</> : 'Preise auf Anfrage'}
@@ -58,6 +66,10 @@ const facts = [
     display: block;
     aspect-ratio: 3 / 2;
     overflow: hidden;
+  }
+
+  h3 {
+    font-size: 1.5rem;
   }
 
   .card__img :global(img) {

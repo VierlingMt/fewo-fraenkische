@@ -5,13 +5,15 @@ import NewsCard from '../components/NewsCard.astro';
 import FeedList from '../components/FeedList.astro';
 import { getPublishedNews, getWohnungen } from '../lib/news';
 import { getFeedItems } from '../lib/feed';
+import { getFotos } from '../lib/fotos';
 import { SITE } from '../config';
-import { Picture } from 'astro:assets';
-import heroImg from '../assets/burgruine-neideck.jpg';
+import { Image, Picture } from 'astro:assets';
+import regionImg from '../assets/burgruine-neideck.jpg';
 
 const wohnungen = await getWohnungen();
 const posts = (await getPublishedNews()).slice(0, 3);
 const feed = getFeedItems(8);
+const heroFoto = wohnungen.map((w) => getFotos(w.id)[0]).find(Boolean);
 
 const jsonLd = [
   {
@@ -27,8 +29,10 @@ const jsonLd = [
     name: SITE.name,
     description: SITE.description,
     url: Astro.site?.href,
+    email: SITE.contact.email,
     address: {
       '@type': 'PostalAddress',
+      streetAddress: SITE.contact.street,
       addressLocality: SITE.town,
       postalCode: SITE.postalCode,
       addressRegion: 'Bayern',
@@ -48,35 +52,61 @@ const jsonLd = [
 
 <Base jsonLd={jsonLd}>
   <section class="hero">
-    <Picture
-      src={heroImg}
-      alt="Burgruine Neideck über dem Wiesenttal bei Ebermannstadt"
-      class="hero__img"
-      widths={[640, 1024, 1600, 1920]}
-      sizes="100vw"
-      formats={['avif', 'webp']}
-      loading="eager"
-      fetchpriority="high"
-    />
     <div class="container hero__inner">
-      <p class="hero__kicker">{SITE.town} · {SITE.region}</p>
-      <h1>Ferienwohnungen in Ebermannstadt – mitten in der Fränkischen Schweiz</h1>
-      <p class="lead">
-        Zwei liebevoll eingerichtete Ferienwohnungen als Ausgangspunkt für Wandern, Klettern, Radfahren und
-        Genießen. Dazu immer aktuell: News, Feste und Ausflugstipps aus der Region.
-      </p>
-      <div class="hero__actions">
-        <a class="btn" href="/ferienwohnungen/">Ferienwohnungen ansehen</a>
-        <a class="btn btn--ghost" href="/kontakt/">Anfrage senden</a>
+      <div class="hero__text">
+        <p class="eyebrow">{SITE.town} · {SITE.region}</p>
+        <h1>Moderne Ferienwohnungen mitten in der Fränkischen Schweiz</h1>
+        <p class="lead">
+          Zwei modern eingerichtete Wohnungen in Ebermannstadt – ideal zum Wandern, Klettern, Radfahren und
+          Genießen. Dazu immer aktuell: News, Feste und Ausflugstipps aus der Region.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="/ferienwohnungen/">Ferienwohnungen ansehen</a>
+          <a class="btn btn--ghost" href="/kontakt/">Anfrage senden</a>
+        </div>
+        <ul class="hero__facts">
+          <li><strong>2</strong> Wohnungen</li>
+          <li><strong>2–4</strong> Gäste</li>
+          <li><strong>Innenstadt</strong> zu Fuß</li>
+        </ul>
+      </div>
+      <div class="hero__media">
+        {
+          heroFoto && (
+            <Image
+              src={heroFoto.src}
+              alt={`Ferienwohnung: ${heroFoto.label}`}
+              class="hero__main"
+              widths={[600, 900, 1200]}
+              sizes="(min-width: 960px) 600px, 100vw"
+              format="webp"
+              loading="eager"
+              fetchpriority="high"
+            />
+          )
+        }
+        <figure class="hero__badge">
+          <Image
+            src={regionImg}
+            alt="Burgruine Neideck über dem Wiesenttal"
+            widths={[240, 480]}
+            sizes="240px"
+            format="webp"
+          />
+          <figcaption>Burgruine Neideck im Wiesenttal</figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--white">
     <div class="container">
       <div class="section__head">
-        <h2>Unsere Ferienwohnungen</h2>
-        <a href="/ferienwohnungen/">Alle Details →</a>
+        <div>
+          <p class="eyebrow">Unterkünfte</p>
+          <h2>Unsere Ferienwohnungen</h2>
+        </div>
+        <a class="more" href="/ferienwohnungen/">Alle Details</a>
       </div>
       <div class="grid grid--2">
         {wohnungen.map((w) => <WohnungCard wohnung={w} />)}
@@ -84,12 +114,38 @@ const jsonLd = [
     </div>
   </section>
 
-  <section class="section section--sand">
+  <section class="region">
+    <Picture
+      src={regionImg}
+      alt=""
+      class="region__img"
+      widths={[640, 1024, 1600, 1920]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+    />
+    <div class="container region__inner">
+      <div class="region__box">
+        <p class="eyebrow">Die Region</p>
+        <h2>Urlaub in der Fränkischen Schweiz</h2>
+        <p>
+          Ebermannstadt liegt im Wiesenttal in der Fränkischen Schweiz – zwischen Bamberg, Bayreuth und Nürnberg.
+          Felsen, Burgen und Höhlen, zahlreiche kleine Brauereien und ein dichtes Netz an Wander- und Radwegen
+          machen die Region zu einem der schönsten Ferienziele in Bayern.
+        </p>
+        <a class="btn btn--light" href="/news/">Ausflugstipps entdecken</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="container news-layout">
       <div>
         <div class="section__head">
-          <h2>Tipps & Neuigkeiten</h2>
-          <a href="/news/">Alle Beiträge →</a>
+          <div>
+            <p class="eyebrow">Unsere Tipps</p>
+            <h2>Tipps & Neuigkeiten</h2>
+          </div>
+          <a class="more" href="/news/">Alle Beiträge</a>
         </div>
         <div class="grid">
           {posts.map((p) => <NewsCard post={p} />)}
@@ -97,41 +153,124 @@ const jsonLd = [
       </div>
       <aside aria-labelledby="region-news">
         <div class="section__head">
-          <h2 id="region-news">Aus der Region</h2>
+          <div>
+            <p class="eyebrow">Automatisch aktualisiert</p>
+            <h2 id="region-news">Aus der Region</h2>
+          </div>
         </div>
         <FeedList items={feed} />
-        <p class="meta">Schlagzeilen externer Quellen, automatisch aktualisiert.</p>
       </aside>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container prose">
-      <h2>Urlaub in der Fränkischen Schweiz</h2>
-      <p>
-        Ebermannstadt liegt im Wiesenttal in der Fränkischen Schweiz – zwischen Bamberg, Bayreuth und
-        Nürnberg. Felsen, Burgen und Höhlen, zahlreiche kleine Brauereien und ein dichtes Netz an Wander- und
-        Radwegen machen die Region zu einem der schönsten Ferienziele in Bayern.
-      </p>
-      <p>
-        Von unseren Ferienwohnungen aus erreichen Sie viele Ausflugsziele in wenigen Minuten.
-        In unseren <a href="/news/">News & Tipps</a> stellen wir regelmäßig Wanderungen, Feste und Sehenswürdigkeiten vor.
-      </p>
     </div>
   </section>
 </Base>
 
 <style>
   .hero {
-    position: relative;
-    min-height: min(78vh, 640px);
-    display: flex;
-    align-items: flex-end;
-    color: #fff;
+    background: var(--c-surface);
+    padding: 48px 0 72px;
     overflow: hidden;
   }
 
-  .hero :global(.hero__img) {
+  .hero__inner {
+    display: grid;
+    gap: 48px;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 960px) {
+    .hero {
+      padding: 72px 0 96px;
+    }
+
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    }
+  }
+
+  .hero h1 {
+    max-width: 16ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    list-style: none;
+    margin: 36px 0 0;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: 0.95rem;
+  }
+
+  .hero__facts strong {
+    display: block;
+    color: var(--c-text);
+    font-size: 1.4rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__media {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  .hero__media :global(.hero__main) {
+    width: 100%;
+    aspect-ratio: 4 / 3.4;
+    object-fit: cover;
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .hero__badge {
+    position: absolute;
+    left: -16px;
+    bottom: 0;
+    width: min(48%, 240px);
+    margin: 0;
+    background: #fff;
+    border-radius: 18px;
+    padding: 8px 8px 10px;
+    box-shadow: 0 18px 40px rgb(16 20 24 / 0.18);
+  }
+
+  @media (max-width: 959px) {
+    .hero__badge {
+      left: 12px;
+    }
+  }
+
+  .hero__badge :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .hero__badge figcaption {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 8px 4px 0;
+    line-height: 1.3;
+  }
+
+  .region {
+    position: relative;
+    padding: 120px 0;
+    overflow: hidden;
+  }
+
+  .region :global(.region__img) {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -139,60 +278,41 @@ const jsonLd = [
     object-fit: cover;
   }
 
-  .hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(20 35 27 / 0.1) 20%, rgb(20 35 27 / 0.75) 100%);
-  }
-
-  .hero__inner {
+  .region__inner {
     position: relative;
-    z-index: 1;
-    padding-top: 96px;
-    padding-bottom: 48px;
   }
 
-  .hero h1 {
+  .region__box {
+    max-width: 560px;
+    background: rgb(20 24 27 / 0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #eceef0;
+    border-radius: var(--radius);
+    padding: 36px;
+  }
+
+  .region__box h2 {
     color: #fff;
-    max-width: 20ch;
-    text-shadow: 0 2px 16px rgb(0 0 0 / 0.35);
   }
 
-  .hero .lead {
-    color: #eef3ef;
+  .region__box .eyebrow {
+    color: #9fd99a;
   }
 
-  .hero__kicker {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.8rem;
-    color: #f3d6b5;
-    font-weight: 700;
-    margin: 0 0 12px;
-  }
-
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  .hero .btn--ghost {
-    color: #fff;
-    border-color: #fff;
+  .region__box p {
+    margin: 0 0 24px;
   }
 
   .news-layout {
     display: grid;
-    gap: 40px;
+    gap: 56px;
     grid-template-columns: minmax(0, 1fr);
   }
 
   @media (min-width: 960px) {
     .news-layout {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
     }
   }
 </style>

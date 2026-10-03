@@ -37,8 +37,8 @@ const { items } = Astro.props;
     display: grid;
     gap: 0;
     background: var(--c-surface);
-    border: 1px solid var(--c-line);
     border-radius: var(--radius);
+    box-shadow: var(--shadow);
   }
 
   .feed__item {
@@ -57,7 +57,7 @@ const { items } = Astro.props;
   }
 
   .feed__item > a:hover {
-    color: var(--c-primary);
+    color: var(--c-accent);
     text-decoration: underline;
   }
 
