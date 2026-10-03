@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { Image } from 'astro:assets';
 import { getRegionSeiten } from '../../lib/region';
 import regionImg from '../../assets/burgruine-neideck.jpg';
+import Icon from '../../components/Icon.astro';
 
 const seiten = await getRegionSeiten();
 ---
@@ -40,6 +41,7 @@ const seiten = await getRegionSeiten();
           seiten.map((s) => (
             <a class="card tile" href={`/region/${s.id}/`}>
               <div class="card__body">
+                <Icon name={s.data.icon} class="tile__icon" />
                 <h2>{s.data.title}</h2>
                 <p>{s.data.kurz}</p>
                 <span class="more">Zu den Tipps</span>
@@ -49,6 +51,7 @@ const seiten = await getRegionSeiten();
         }
         <a class="card tile tile--dark" href="/veranstaltungen/">
           <div class="card__body">
+            <Icon name="calendar-days" class="tile__icon" />
             <h2>Aktuelle Veranstaltungen</h2>
             <p>Kirchweih, Führungen, Märkte und Konzerte der nächsten Wochen – täglich aktualisiert.</p>
             <span class="more">Zum Kalender</span>
@@ -90,6 +93,29 @@ const seiten = await getRegionSeiten();
   .tile:hover {
     transform: translateY(-3px);
     color: var(--c-text);
+  }
+
+  .tile :global(.tile__icon) {
+    width: 52px;
+    height: 52px;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--c-accent-soft);
+    color: var(--c-accent);
+    margin-bottom: 6px;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+
+  .tile:hover :global(.tile__icon) {
+    background: var(--c-accent);
+    color: #fff;
+  }
+
+  .tile--dark :global(.tile__icon) {
+    background: rgb(255 255 255 / 0.1);
+    color: #9fd99a;
   }
 
   .tile h2 {

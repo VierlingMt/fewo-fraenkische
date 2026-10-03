@@ -3,6 +3,7 @@ title: Radtouren, Mountainbike & Kanu
 kurz: Bierkellertour, Wiesent- und Trubachtal, Kanufahren auf der Wiesent.
 description: Radtouren ab Ebermannstadt – Bierkellertour, Wiesent- und Trubachtaltour, Wiesent- und Leinleitertal. Dazu Mountainbiken, Kanufahren und Radverleih in der Fränkischen Schweiz.
 order: 3
+icon: bike
 eintraege:
   - name: Bierkellertour
     info: ca. 30 km · mittel bis anspruchsvoll

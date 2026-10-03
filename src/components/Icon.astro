@@ -1,0 +1,46 @@
+---
+// Lucide-Icons (ISC-Lizenz), werden beim Build direkt als SVG eingebettet.
+import castle from 'lucide-static/icons/castle.svg?raw';
+import mountainSnow from 'lucide-static/icons/mountain-snow.svg?raw';
+import bike from 'lucide-static/icons/bike.svg?raw';
+import utensils from 'lucide-static/icons/utensils-crossed.svg?raw';
+import ferrisWheel from 'lucide-static/icons/ferris-wheel.svg?raw';
+import partyPopper from 'lucide-static/icons/party-popper.svg?raw';
+import info from 'lucide-static/icons/info.svg?raw';
+import calendarDays from 'lucide-static/icons/calendar-days.svg?raw';
+
+const icons = {
+  castle,
+  'mountain-snow': mountainSnow,
+  bike,
+  utensils,
+  'ferris-wheel': ferrisWheel,
+  'party-popper': partyPopper,
+  info,
+  'calendar-days': calendarDays,
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const svg = icons[name].replace(/<!--[\s\S]*?-->/g, '').replace('<svg', '<svg aria-hidden="true" focusable="false"');
+---
+
+<span class:list={['icon', className]} set:html={svg} />
+
+<style>
+  .icon {
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  .icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+</style>

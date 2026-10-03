@@ -3,6 +3,7 @@ title: Wandern & Aussichtspunkte
 kurz: Schlüsselstein, Wallerwarte, Hummerstein – die schönsten Ausblicke über Ebermannstadt.
 description: Wandern in der Fränkischen Schweiz ab Ebermannstadt – die schönsten Aussichtspunkte Schlüsselstein, Wallerwarte, Hummerstein und Burgruine Neideck, direkt ab der Ferienwohnung erreichbar.
 order: 2
+icon: mountain-snow
 schemaTyp: TouristAttraction
 eintraege:
   - name: Schlüsselstein

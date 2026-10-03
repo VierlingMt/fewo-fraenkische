@@ -3,6 +3,7 @@ title: Ausflugsziele rund um Ebermannstadt
 kurz: Burgen, Höhlen, Museumsbahn – unsere Lieblingsziele in der Fränkischen Schweiz.
 description: Die schönsten Ausflugsziele rund um Ebermannstadt in der Fränkischen Schweiz – Burgruine Neideck, Binghöhle, Teufelshöhle, Burg Rabenstein, Dampfbahn und Levi-Strauss-Museum. Tipps von Ihren Gastgebern.
 order: 1
+icon: castle
 schemaTyp: TouristAttraction
 eintraege:
   - name: Burgruine Neideck

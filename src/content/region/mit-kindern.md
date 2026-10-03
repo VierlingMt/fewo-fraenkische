@@ -3,6 +3,7 @@ title: Urlaub mit Kindern
 kurz: Spielplätze vor der Tür, Wildpark, Sommerrodelbahn und Indoor-Spielplatz.
 description: Familienurlaub in der Fränkischen Schweiz – Spielplätze direkt bei den Ferienwohnungen in Ebermannstadt, Wildpark Hundshaupten, Rodelbahn Pottenstein und weitere Ausflugstipps für Kinder.
 order: 5
+icon: ferris-wheel
 schemaTyp: TouristAttraction
 eintraege:
   - name: Spielplatz Judenäcker / Lochwiese

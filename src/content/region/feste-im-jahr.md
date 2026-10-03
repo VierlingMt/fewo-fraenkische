@@ -3,6 +3,7 @@ title: Feste & Highlights im Jahr
 kurz: Annafest, Walberlafest, Osterbrunnen, Kerwa und Weihnachtsmarkt.
 description: Die schönsten Feste rund um Ebermannstadt im Jahresverlauf – Walberlafest, Annafest Forchheim, Tag der offenen Brennerei, Osterbrunnen, Altstadtfest, Zeltkerwa und Weihnachtsmarkt.
 order: 6
+icon: party-popper
 eintraege:
   - name: Osterbrunnen
     info: Frühjahr, rund um Ostern

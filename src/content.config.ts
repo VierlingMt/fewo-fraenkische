@@ -52,6 +52,7 @@ const region = defineCollection({
     description: z.string(),
     order: z.number().default(0),
     schemaTyp: z.enum(['TouristAttraction', 'Restaurant', 'Event']).optional(),
+    icon: z.enum(['castle', 'mountain-snow', 'bike', 'utensils', 'ferris-wheel', 'party-popper', 'info']).default('info'),
     eintraege: z.array(eintrag).default([]),
   }),
 });

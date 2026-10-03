@@ -3,6 +3,7 @@ title: Gut zu wissen – Anreise & Einkaufen
 kurz: Mit Bahn und Bus nach Ebermannstadt, Supermärkte, Apotheken und Ärzte.
 description: Anreise nach Ebermannstadt mit Bahn und Bus, Taxi, Supermärkte, Apotheken und Ärzte – praktische Infos für Ihren Urlaub in den Ferienwohnungen in Ebermannstadt.
 order: 7
+icon: info
 ---
 
 ## Anreise mit Bahn und Bus

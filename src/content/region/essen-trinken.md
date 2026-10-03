@@ -3,6 +3,7 @@ title: Essen & Trinken in Ebermannstadt
 kurz: Unsere Restaurant-Tipps, Lieferdienste und der Bäcker für frische Brötchen.
 description: Restaurant-Tipps in Ebermannstadt von Ihren Gastgebern – fränkisch, griechisch, thailändisch und italienisch. Dazu Lieferdienste, Bäcker und Grillfleisch-Automat in der Nähe.
 order: 4
+icon: utensils
 schemaTyp: Restaurant
 eintraege:
   - name: Schwanenbräu Ebermannstadt
