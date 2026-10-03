@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { getRegionSeiten } from '../../lib/region';
+import regionImg from '../../assets/burgruine-neideck.jpg';
+
+const seiten = await getRegionSeiten();
+---
+
+<Base
+  title="Urlaub in der Fränkischen Schweiz – Tipps rund um Ebermannstadt"
+  description="Ausflugsziele, Wanderungen, Radtouren, Restaurants und Familienausflüge rund um Ebermannstadt – persönliche Tipps Ihrer Gastgeber für den Urlaub in der Fränkischen Schweiz."
+>
+  <section class="section section--white">
+    <div class="container head">
+      <div>
+        <p class="eyebrow">Tipps von Martin & Jenny</p>
+        <h1>Urlaub in der Fränkischen Schweiz</h1>
+        <p class="lead">
+          Ebermannstadt liegt im Wiesenttal – zwischen Bamberg, Bayreuth und Nürnberg. Burgen, Höhlen, Felsen,
+          Bierkeller und unzählige Wander- und Radwege liegen direkt vor der Tür. Hier haben wir unsere
+          persönlichen Empfehlungen für Sie zusammengestellt.
+        </p>
+      </div>
+      <Image
+        src={regionImg}
+        alt="Burgruine Neideck über dem Wiesenttal"
+        class="head__img"
+        widths={[500, 800, 1100]}
+        sizes="(min-width: 900px) 520px, 100vw"
+        format="webp"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid">
+        {
+          seiten.map((s) => (
+            <a class="card tile" href={`/region/${s.id}/`}>
+              <div class="card__body">
+                <h2>{s.data.title}</h2>
+                <p>{s.data.kurz}</p>
+                <span class="more">Zu den Tipps</span>
+              </div>
+            </a>
+          ))
+        }
+        <a class="card tile tile--dark" href="/veranstaltungen/">
+          <div class="card__body">
+            <h2>Aktuelle Veranstaltungen</h2>
+            <p>Kirchweih, Führungen, Märkte und Konzerte der nächsten Wochen – täglich aktualisiert.</p>
+            <span class="more">Zum Kalender</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    display: grid;
+    gap: 40px;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 900px) {
+    .head {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+
+  .head :global(.head__img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .tile {
+    text-decoration: none;
+    color: var(--c-text);
+    transition: transform 0.2s;
+  }
+
+  .tile:hover {
+    transform: translateY(-3px);
+    color: var(--c-text);
+  }
+
+  .tile h2 {
+    font-size: 1.35rem;
+  }
+
+  .tile p {
+    color: var(--c-muted);
+  }
+
+  .tile--dark {
+    background: var(--c-dark);
+  }
+
+  .tile--dark h2,
+  .tile--dark .more {
+    color: #fff;
+  }
+
+  .tile--dark p {
+    color: #c9cdd1;
+  }
+</style>

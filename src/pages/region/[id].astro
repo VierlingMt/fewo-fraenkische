@@ -1,0 +1,223 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getRegionSeiten } from '../../lib/region';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const seiten = await getRegionSeiten();
+  return seiten.map((seite) => ({ params: { id: seite.id }, props: { seite, alle: seiten } }));
+}
+
+const { seite, alle } = Astro.props;
+const d = seite.data;
+const { Content } = await render(seite);
+const url = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Region', item: new URL('/region/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: d.title, item: url },
+    ],
+  },
+  ...(d.schemaTyp && d.schemaTyp !== 'Event'
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: d.title,
+          itemListElement: d.eintraege.map((e, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            item: {
+              '@type': d.schemaTyp,
+              name: e.name,
+              description: e.text,
+              ...(e.url && { url: e.url }),
+              ...(e.ort && { address: e.ort }),
+            },
+          })),
+        },
+      ]
+    : []),
+];
+---
+
+<Base title={d.title} description={d.description} jsonLd={jsonLd}>
+  <section class="section section--white intro">
+    <div class="container">
+      <p class="meta crumbs"><a href="/region/">Region</a> / {d.title}</p>
+      <h1>{d.title}</h1>
+      <div class="prose lead-text">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  {
+    d.eintraege.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="eintraege">
+            {d.eintraege.map((e) => (
+              <article class="card eintrag">
+                <div class="card__body">
+                  {e.info && <p class="eintrag__info">{e.info}</p>}
+                  <h2>{e.name}</h2>
+                  {e.ort && <p class="meta">{e.ort}</p>}
+                  <p>{e.text}</p>
+                  {e.url && (
+                    <div class="eintrag__link">
+                      <a class="more" href={e.url} target="_blank" rel="noopener">
+                        Website
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--white">
+    <div class="container weiter">
+      <div class="card cta">
+        <div class="card__body">
+          <p class="eyebrow">Ihre Unterkunft</p>
+          <h2>Mittendrin wohnen</h2>
+          <p>
+            Unsere zwei Ferienwohnungen in {SITE.town} sind der ideale Ausgangspunkt für alle Tipps auf dieser
+            Seite.
+          </p>
+          <div><a class="btn" href="/ferienwohnungen/">Ferienwohnungen ansehen</a></div>
+        </div>
+      </div>
+      <nav aria-label="Weitere Tipps zur Region">
+        <p class="eyebrow">Mehr aus der Region</p>
+        <ul class="links">
+          {
+            alle
+              .filter((s) => s.id !== seite.id)
+              .map((s) => (
+                <li>
+                  <a href={`/region/${s.id}/`}>
+                    <strong>{s.data.title}</strong>
+                    <span>{s.data.kurz}</span>
+                  </a>
+                </li>
+              ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-bottom: 48px;
+  }
+
+  .lead-text {
+    font-size: 1.12rem;
+    color: var(--c-muted);
+  }
+
+  .lead-text :global(h2) {
+    color: var(--c-text);
+  }
+
+  .eintraege {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+
+  .eintrag .card__body > :last-child {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .eintrag .card__body > .eintrag__link {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .eintrag h2 {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .eintrag__info {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
+
+  .weiter {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .weiter {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  .cta {
+    background: var(--c-dark);
+    color: #e9ebec;
+  }
+
+  .cta h2 {
+    color: #fff;
+  }
+
+  .cta .eyebrow {
+    color: #9fd99a;
+  }
+
+  .cta .btn {
+    background: #fff;
+    color: var(--c-dark);
+    border-color: #fff;
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+  }
+
+  .links a {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--c-line);
+    text-decoration: none;
+    color: var(--c-text);
+  }
+
+  .links a:hover strong {
+    color: var(--c-accent);
+  }
+
+  .links span {
+    font-size: 0.92rem;
+    color: var(--c-muted);
+  }
+</style>
