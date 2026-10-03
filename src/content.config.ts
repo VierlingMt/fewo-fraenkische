@@ -28,6 +28,26 @@ const seiten = defineCollection({
   }),
 });
 
+const eintrag = z.object({
+  name: z.string(),
+  text: z.string(),
+  ort: z.string().optional(),
+  info: z.string().optional(),
+  url: z.url().optional(),
+});
+
+const region = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/region' }),
+  schema: z.object({
+    title: z.string(),
+    kurz: z.string(),
+    description: z.string(),
+    order: z.number().default(0),
+    schemaTyp: z.enum(['TouristAttraction', 'Restaurant', 'Event']).optional(),
+    eintraege: z.array(eintrag).default([]),
+  }),
+});
+
 const news = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/news' }),
   schema: z.object({
@@ -42,4 +62,4 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { wohnungen, news, seiten };
+export const collections = { wohnungen, news, seiten, region };
