@@ -10,6 +10,14 @@ const bilder = import.meta.glob<ImageMetadata>('../../assets/region/*.{jpg,jpeg,
   eager: true,
   import: 'default',
 });
+import commons from '../../data/commons-bilder.json';
+
+// Bildnachweis: aus dem Eintrag selbst oder aus src/data/commons-bilder.json
+const nachweis = (e: { bild?: string; bildAutor?: string; bildLizenz?: string; bildLizenzUrl?: string; bildQuelle?: string }) => {
+  if (e.bildAutor) return { autor: e.bildAutor, lizenz: e.bildLizenz, lizenzUrl: e.bildLizenzUrl, quelle: e.bildQuelle };
+  const c = Object.values(commons).find((x) => x.datei === e.bild);
+  return c ? { autor: c.autor, lizenz: c.lizenz, lizenzUrl: c.lizenzUrl ?? undefined, quelle: c.quelle } : undefined;
+};
 const bildFuer = (datei?: string) =>
   datei ? Object.entries(bilder).find(([pfad]) => pfad.endsWith(`/${datei}`))?.[1] : undefined;
 
@@ -92,25 +100,25 @@ const jsonLd = [
                     />
                     <figcaption>
                       <span>{e.name}</span>
-                      {e.bildAutor && (
+                      {nachweis(e) && (
                         <small>
                           Foto:{' '}
-                          {e.bildQuelle ? (
-                            <a href={e.bildQuelle} target="_blank" rel="noopener">
-                              {e.bildAutor}
+                          {nachweis(e)!.quelle ? (
+                            <a href={nachweis(e)!.quelle} target="_blank" rel="noopener">
+                              {nachweis(e)!.autor}
                             </a>
                           ) : (
-                            e.bildAutor
+                            nachweis(e)!.autor
                           )}
-                          {e.bildLizenz && (
+                          {nachweis(e)!.lizenz && (
                             <>
                               ,{' '}
-                              {e.bildLizenzUrl ? (
-                                <a href={e.bildLizenzUrl} target="_blank" rel="noopener license">
-                                  {e.bildLizenz}
+                              {nachweis(e)!.lizenzUrl ? (
+                                <a href={nachweis(e)!.lizenzUrl} target="_blank" rel="noopener license">
+                                  {nachweis(e)!.lizenz}
                                 </a>
                               ) : (
-                                e.bildLizenz
+                                nachweis(e)!.lizenz
                               )}
                             </>
                           )}

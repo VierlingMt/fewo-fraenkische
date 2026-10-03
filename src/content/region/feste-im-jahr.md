@@ -7,18 +7,21 @@ eintraege:
   - name: Osterbrunnen
     info: Frühjahr, rund um Ostern
     text: Eine typisch fränkische Tradition – liebevoll geschmückte Brunnen in Ebermannstadt, Rüssenbach, Niedermirsberg, Neuses-Poxstall, Eschlipp, Gasseldorf, Buckenreuth, Wohlmuthshüll, Moggast und vielen weiteren Orten der Fränkischen Schweiz.
+    bild: osterbrunnen.jpg
   - name: Walberlafest
     ort: Kirchehrenbach
     info: Anfang Mai
     text: Über Kirchehrenbach erhebt sich weithin sichtbar der Tafelberg Walberla. Hier oben findet das urigste fränkische Bergfest statt.
     url: https://www.walberla.de
     maps: "Walberla, Kirchehrenbach"
+    bild: walberla.jpg
   - name: Annafest Forchheim
     ort: Kellerwald, Forchheim
     info: Ende Juli bis Anfang August
     text: Ein kühles Bier unter Eichen, zünftig schlemmen und ausgelassen feiern – das traditionelle Annafest im Kellerwald mit seiner einzigartigen Naturkulisse.
     url: https://www.annafest.bayern
     maps: "Kellerwald, Forchheim"
+    bild: annafest.jpg
   - name: Altstadtfest Ebermannstadt
     ort: Ebermannstadt
     text: Buntes Programm in der Altstadt, dazu regionale Weine, Bier und weitere Köstlichkeiten.

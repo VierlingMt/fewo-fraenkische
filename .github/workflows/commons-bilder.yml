@@ -1,0 +1,45 @@
+# Lädt die in src/data/commons-bilder.json ausgewählten Fotos von Wikimedia Commons
+# nach src/assets/region/ und committet sie. Bereits vorhandene Dateien werden übersprungen.
+name: Commons-Bilder holen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Bilder herunterladen
+        run: |
+          python3 - <<'PY'
+          import json, os, time, urllib.request
+          UA = {'User-Agent': 'FeWoFraenkische-Website/1.0 (info@fewo-fraenkische.de)'}
+          bilder = json.load(open('src/data/commons-bilder.json'))
+          os.makedirs('src/assets/region', exist_ok=True)
+          for key, b in bilder.items():
+              ziel = f"src/assets/region/{b['datei']}"
+              if os.path.exists(ziel):
+                  print('vorhanden', ziel); continue
+              for versuch in range(5):
+                  try:
+                      data = urllib.request.urlopen(urllib.request.Request(b['download'], headers=UA), timeout=60).read()
+                      open(ziel, 'wb').write(data); print('geladen', ziel, len(data)); break
+                  except Exception as e:
+                      print('Fehler', key, e); time.sleep(10 * (versuch + 1))
+              time.sleep(2)
+          PY
+
+      - name: Committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/assets/region
+          git diff --cached --quiet && { echo "Nichts Neues"; exit 0; }
+          git commit -m "Region: Fotos von Wikimedia Commons"
+          git push

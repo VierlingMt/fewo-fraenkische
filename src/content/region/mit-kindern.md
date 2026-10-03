@@ -20,15 +20,18 @@ eintraege:
     info: ca. 10 km
     text: Knapp 40 heimische und seltene Tierarten leben in der weitläufigen Parklandschaft – Natur und Tiere hautnah erleben.
     url: https://www.wildpark-hundshaupten.de
+    bild: wildpark.jpg
   - name: Rodelbahn Pottenstein (Erlebnisfelsen)
     ort: Am Langen Berg 50, 91278 Pottenstein
     info: ca. 20 km
     text: Sommer wie Winter – auf zwei Rodelbahnen geht es über einen Kilometer bergab. Rasanter Spaß für Groß und Klein.
     url: https://www.erlebnisfelsen-pottenstein.de
+    bild: rodelbahn.jpg
   - name: Dampfbahn Fränkische Schweiz
     ort: Bahnhofsplatz 1, 91320 Ebermannstadt
     text: Mit der historischen Museumsbahn durch das Wiesenttal – für Kinder ein echtes Abenteuer.
     url: https://www.dampfbahn.net
+    bild: dampfbahn.jpg
   - name: Bambini Kinderwelt Bamberg
     ort: Geisfelder Str. 48, 96050 Bamberg
     info: ca. 30 km · Indoor

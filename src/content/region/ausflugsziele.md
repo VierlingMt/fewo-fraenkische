@@ -16,22 +16,27 @@ eintraege:
     text: Eine der schönsten Tropfstein-Galeriehöhlen Deutschlands – ein Erlebnis bei jedem Wetter.
     url: https://www.binghoehle.de
     maps: "Binghöhle, Streitberg"
+    bild: binghoehle.jpg
   - name: Teufelshöhle Pottenstein
     ort: Schüttersmühle 5, 91278 Pottenstein
     text: Eine der schönsten und größten Tropfsteinhöhlen Bayerns. Ideal auch an Regentagen.
     url: https://www.pottenstein.de
+    bild: teufelshoehle.jpg
   - name: Burg Rabenstein
     ort: Rabenstein 33, 95491 Ahorntal
     text: Burg auf einer hinausragenden Felsspitze – mit Burgschänke, Falknerei und der Sophienhöhle gleich nebenan.
     url: https://www.burg-rabenstein.de
+    bild: rabenstein.jpg
   - name: Dampfbahn Fränkische Schweiz
     ort: Bahnhofsplatz 1, 91320 Ebermannstadt
     text: Seit über vier Jahrzehnten ist Frankens erste Museumsbahn im Einsatz und fährt von Ebermannstadt durch das Wiesenttal nach Behringersmühle. Der Ausflug startet praktisch vor der Haustür.
     url: https://www.dampfbahn.net
+    bild: dampfbahn.jpg
   - name: Levi-Strauss-Museum
     ort: Marktstr. 31–33, 96155 Buttenheim
     text: Jeder kennt sie, jeder trägt sie – die Jeans. Durch den Franken Löb Strauss wurde sie weltberühmt. Das Museum erzählt die Geschichte von Levi Strauss und seiner Jeans.
     url: https://www.levi-strauss-museum.de
+    bild: levi.jpg
 ---
 
 Die Fränkische Schweiz steckt voller Burgen, Höhlen und kleiner Schätze. Von unseren Ferienwohnungen in
