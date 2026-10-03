@@ -15,6 +15,7 @@ Options -Indexes
   RewriteRule ^impressum\.html$ /impressum/ [R=301,L]
   RewriteRule ^datenschutz\.html$ /datenschutz/ [R=301,L]
   RewriteRule ^agb\.html$ /agb/ [R=301,L]
+  RewriteRule ^news/dampfbahn-fraenkische-schweiz/?$ /region/ausflugsziele/ [R=301,L]
   RewriteRule ^index\.php$ /? [R=301,L]
   RewriteCond %{QUERY_STRING} (^|&)(view|option|catid|Itemid)= [NC]
   RewriteRule ^$ /? [R=301,L]
