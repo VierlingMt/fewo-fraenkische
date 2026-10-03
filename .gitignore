@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+# wird beim Build aus RSS-Feeds erzeugt
+src/data/news-feed.json

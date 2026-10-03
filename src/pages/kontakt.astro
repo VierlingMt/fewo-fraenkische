@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { getWohnungen } from '../lib/news';
+import { SITE } from '../config';
+
+const wohnungen = await getWohnungen();
+const subject = encodeURIComponent('Anfrage Ferienwohnung');
+const body = encodeURIComponent(
+  'Hallo,\n\nich interessiere mich für folgende Ferienwohnung:\n\nWohnung: \nAnreise: \nAbreise: \nPersonen: \n\nViele Grüße\n',
+);
+---
+
+<Base
+  title="Kontakt & Anfrage"
+  description="Fragen Sie Ihre Ferienwohnung in Ebermannstadt direkt bei uns an – per E-Mail oder über Booking.com."
+>
+  <section class="section">
+    <div class="container">
+      <h1>Kontakt & Anfrage</h1>
+      <p class="lead">
+        Sie möchten eine unserer Ferienwohnungen buchen oder haben eine Frage? Schreiben Sie uns – wir melden uns
+        schnellstmöglich bei Ihnen.
+      </p>
+
+      <div class="grid grid--2" style="margin-top: 32px">
+        <div class="card">
+          <div class="card__body">
+            <h2>Direkt anfragen</h2>
+            <p>
+              Nennen Sie uns Ihre Wunschwohnung, den Reisezeitraum und die Anzahl der Personen. Sie erhalten eine
+              schriftliche Bestätigung und die Rechnung per E-Mail.
+            </p>
+            <p>
+              <strong>{SITE.name}</strong><br />
+              {SITE.contact.name}<br />
+              {SITE.contact.street}<br />
+              {SITE.postalCode} {SITE.town}
+            </p>
+            <div>
+              <a class="btn" href={`mailto:${SITE.contact.email}?subject=${subject}&body=${body}`}>
+                E-Mail an {SITE.contact.email}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__body">
+            <h2>Online buchen</h2>
+            <p>Beide Wohnungen sind auch über Booking.com buchbar:</p>
+            <ul>
+              {
+                wohnungen
+                  .filter((w) => w.data.bookingUrl)
+                  .map((w) => (
+                    <li>
+                      <a href={w.data.bookingUrl} target="_blank" rel="noopener">
+                        {w.data.title} auf Booking.com
+                      </a>
+                    </li>
+                  ))
+              }
+            </ul>
+            <p class="meta">
+              Es gelten unsere <a href="/agb/">Allgemeinen Geschäftsbedingungen</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

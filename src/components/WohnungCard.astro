@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  wohnung: CollectionEntry<'wohnungen'>;
+}
+
+const { wohnung } = Astro.props;
+const d = wohnung.data;
+const facts = [
+  d.personen && `bis ${d.personen} Personen`,
+  d.schlafzimmer && `${d.schlafzimmer} Schlafzimmer`,
+  d.groesse && `${d.groesse} m²`,
+].filter(Boolean);
+---
+
+<article class="card">
+  {
+    d.bild ? (
+      <img src={d.bild} alt={d.bildAlt ?? d.title} loading="lazy" width="900" height="600" />
+    ) : (
+      <div class="placeholder-img">Foto folgt</div>
+    )
+  }
+  <div class="card__body">
+    <h3><a href={`/ferienwohnungen/${wohnung.id}/`}>{d.title}</a></h3>
+    {facts.length > 0 && <p class="meta">{facts.join(' · ')}</p>}
+    <p>{d.teaser}</p>
+    <p class="price">
+      {d.preisAb ? <>ab <strong>{d.preisAb} €</strong> / Nacht</> : 'Preise auf Anfrage'}
+    </p>
+    <div>
+      <a class="btn" href={`/ferienwohnungen/${wohnung.id}/`}>Wohnung ansehen</a>
+    </div>
+  </div>
+</article>
+
+<style>
+  h3 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .price {
+    margin: 0;
+  }
+</style>

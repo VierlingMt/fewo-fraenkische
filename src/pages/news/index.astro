@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import FeedList from '../../components/FeedList.astro';
+import { getPublishedNews } from '../../lib/news';
+import { getFeedItems } from '../../lib/feed';
+
+const posts = await getPublishedNews();
+const feed = getFeedItems(30);
+---
+
+<Base
+  title="News & Ausflugstipps aus der Fränkischen Schweiz"
+  description="Aktuelle Nachrichten, Veranstaltungen und Ausflugstipps rund um Ebermannstadt und die Fränkische Schweiz."
+>
+  <section class="section">
+    <div class="container">
+      <h1>News & Tipps aus der Fränkischen Schweiz</h1>
+      <p class="lead">
+        Ausflugsziele, Wanderungen, Feste und Neuigkeiten rund um Ebermannstadt – von uns für Sie
+        zusammengestellt.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <div class="section__head"><h2>Unsere Tipps</h2></div>
+      {
+        posts.length > 0 ? (
+          <div class="grid">
+            {posts.map((p) => (
+              <NewsCard post={p} />
+            ))}
+          </div>
+        ) : (
+          <p class="meta">Bald gibt es hier unsere ersten Tipps.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container">
+      <div class="section__head"><h2>Aktuelles aus der Region</h2></div>
+      <FeedList items={feed} />
+      <p class="meta">Schlagzeilen externer Quellen, automatisch aktualisiert. Für die Inhalte sind die jeweiligen Anbieter verantwortlich.</p>
+    </div>
+  </section>
+</Base>

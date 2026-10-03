@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  post: CollectionEntry<'news'>;
+}
+
+const { post } = Astro.props;
+const d = post.data;
+---
+
+<article class="card">
+  {d.bild && <img src={d.bild} alt={d.bildAlt ?? d.title} loading="lazy" width="900" height="600" />}
+  <div class="card__body">
+    <p class="meta"><time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time></p>
+    <h3><a href={`/news/${post.id}/`}>{d.title}</a></h3>
+    <p>{d.description}</p>
+    <div><a href={`/news/${post.id}/`}>Weiterlesen →</a></div>
+  </div>
+</article>
+
+<style>
+  h3 a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .meta {
+    margin: 0;
+  }
+</style>

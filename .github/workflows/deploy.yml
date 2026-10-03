@@ -1,13 +1,15 @@
-# Lädt die fertige Website per FTPS auf den Server bei All-Inkl.
-# Vorerst nur manuell: GitHub → Actions → "Deploy (FTP)" → "Run workflow".
+# Baut die Website (Astro) und lädt sie per FTPS auf den Server bei All-Inkl.
 # Zielordner: /www-neu/ (neu.fewo-ebermannstadt.de), überschreibbar per Repo-Variable FTP_SERVER_DIR.
+# Läuft bei jedem Push, manuell und mehrmals täglich (aktualisiert die Regional-News).
 name: Deploy (FTP)
 
 on:
+  push:
+    branches: [main, claude/gifted-wright-bu03up]
   workflow_dispatch:
-  # Automatisch bei jedem Push aktivieren, sobald der Zielordner feststeht:
-  # push:
-  #   branches: [main]
+  schedule:
+    # 05:17, 11:17 und 17:17 UTC
+    - cron: '17 5,11,17 * * *'
 
 permissions:
   contents: read
@@ -24,7 +26,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
 
       - name: Zielordner prüfen
         run: |
@@ -34,7 +41,15 @@ jobs:
           fi
           echo "Ziel: $SERVER_DIR"
 
-      # Später kommt hier der Build der Website (Astro) hin, der nach ./dist/ baut.
+      - run: npm ci
+
+      - name: Regional-News abrufen
+        run: npm run news
+        continue-on-error: true
+
+      - run: npm run check
+
+      - run: npm run build
 
       - name: Per FTPS hochladen
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -43,5 +58,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          local-dir: ./public/
+          local-dir: ./dist/
           server-dir: ${{ env.SERVER_DIR }}

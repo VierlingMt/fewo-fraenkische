@@ -1,0 +1,187 @@
+---
+import '../styles/global.css';
+import { SITE, NAV } from '../config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description = SITE.description, image, type = 'website', jsonLd, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} – ${SITE.claim}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : undefined;
+const robots = SITE.noindex || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+const path = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} – News`} href="/rss.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="/" class="brand">
+          <span class="brand__name">{SITE.name}</span>
+          <span class="brand__claim">{SITE.claim}</span>
+        </a>
+        <nav aria-label="Hauptmenü">
+          <ul class="nav">
+            {
+              NAV.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={
+                      (item.href === '/' ? path === '/' : path.startsWith(item.href)) ? 'page' : undefined
+                    }
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="inhalt">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <div>
+          <strong>{SITE.name}</strong><br />
+          {SITE.town} · {SITE.region}
+        </div>
+        <ul class="footer-links">
+          <li><a href="/kontakt/">Kontakt</a></li>
+          <li><a href="/impressum/">Impressum</a></li>
+          <li><a href="/datenschutz/">Datenschutz</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <div class="meta">© {year} {SITE.name}</div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    background: var(--c-surface);
+    border-bottom: 1px solid var(--c-line);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .brand {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .brand__name {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--c-primary-dark);
+  }
+
+  .brand__claim {
+    font-size: 0.8rem;
+    color: var(--c-muted);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: var(--c-text);
+    font-weight: 500;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav a:hover,
+  .nav a[aria-current='page'] {
+    color: var(--c-primary);
+    border-bottom-color: var(--c-accent);
+  }
+
+  .site-footer {
+    background: var(--c-primary-dark);
+    color: #e8efe9;
+    padding: 36px 0;
+    margin-top: 40px;
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px 32px;
+  }
+
+  .site-footer a {
+    color: #e8efe9;
+  }
+
+  .site-footer .meta {
+    color: #b9cbbf;
+  }
+
+  .footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+</style>

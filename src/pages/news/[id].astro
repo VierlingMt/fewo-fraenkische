@@ -1,0 +1,69 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPublishedNews } from '../../lib/news';
+import { formatDate } from '../../lib/format';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedNews();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const url = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.pubDate.toISOString(),
+  dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  mainEntityOfPage: url,
+  url,
+  inLanguage: SITE.lang,
+  ...(d.bild && { image: new URL(d.bild, Astro.site).href }),
+  author: { '@type': 'Person', name: SITE.contact.name },
+  publisher: { '@type': 'Organization', name: SITE.name, url: Astro.site?.href },
+};
+---
+
+<Base title={d.title} description={d.description} image={d.bild} type="article" jsonLd={jsonLd}>
+  <article class="section">
+    <div class="container prose">
+      <p class="meta"><a href="/news/">News & Tipps</a></p>
+      <h1>{d.title}</h1>
+      <p class="meta">
+        <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
+        {d.tags.length > 0 && <> · {d.tags.map((t) => <span class="tag">{t}</span>)}</>}
+      </p>
+      {d.bild && <img class="post-img" src={d.bild} alt={d.bildAlt ?? d.title} width="1200" height="800" />}
+      <Content />
+      <hr />
+      <p>
+        Lust bekommen? Unsere <a href="/ferienwohnungen/">Ferienwohnungen in Ebermannstadt</a> sind der ideale
+        Ausgangspunkt.
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .post-img {
+    border-radius: var(--radius);
+    margin: 16px 0 24px;
+  }
+
+  .tag {
+    margin-right: 6px;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--c-line);
+    margin: 32px 0 16px;
+  }
+</style>

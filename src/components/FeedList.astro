@@ -1,0 +1,73 @@
+---
+import type { FeedItem } from '../lib/feed';
+import { formatShortDate } from '../lib/format';
+
+interface Props {
+  items: FeedItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length === 0 ? (
+    <p class="meta">Aktuell liegen keine Meldungen aus der Region vor.</p>
+  ) : (
+    <ul class="feed">
+      {items.map((item) => (
+        <li class="feed__item">
+          <a href={item.link} target="_blank" rel="noopener nofollow">
+            {item.title}
+          </a>
+          {item.teaser && <p class="feed__teaser">{item.teaser}</p>}
+          <p class="meta">
+            {item.source} · <time datetime={item.date}>{formatShortDate(new Date(item.date))}</time>
+          </p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .feed {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+  }
+
+  .feed__item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .feed__item:last-child {
+    border-bottom: 0;
+  }
+
+  .feed__item > a {
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--c-text);
+  }
+
+  .feed__item > a:hover {
+    color: var(--c-primary);
+    text-decoration: underline;
+  }
+
+  .feed__teaser {
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+    color: var(--c-muted);
+  }
+
+  .meta {
+    margin: 4px 0 0;
+  }
+</style>

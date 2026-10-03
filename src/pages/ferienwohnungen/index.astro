@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import WohnungCard from '../../components/WohnungCard.astro';
+import { getWohnungen } from '../../lib/news';
+
+const wohnungen = await getWohnungen();
+---
+
+<Base
+  title="Ferienwohnungen in Ebermannstadt"
+  description="Unsere zwei Ferienwohnungen in Ebermannstadt in der Fränkischen Schweiz: Terrassenglück und Waldrand Idyll. Ausstattung, Größe und Preise im Überblick."
+>
+  <section class="section">
+    <div class="container">
+      <h1>Unsere Ferienwohnungen</h1>
+      <p class="lead">
+        Zwei Wohnungen, ein Ziel: entspannte Tage in der Fränkischen Schweiz. Wählen Sie die Wohnung, die zu
+        Ihnen passt.
+      </p>
+      <div class="grid grid--2" style="margin-top: 32px">
+        {wohnungen.map((w) => <WohnungCard wohnung={w} />)}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,198 @@
+---
+import Base from '../layouts/Base.astro';
+import WohnungCard from '../components/WohnungCard.astro';
+import NewsCard from '../components/NewsCard.astro';
+import FeedList from '../components/FeedList.astro';
+import { getPublishedNews, getWohnungen } from '../lib/news';
+import { getFeedItems } from '../lib/feed';
+import { SITE } from '../config';
+import { Picture } from 'astro:assets';
+import heroImg from '../assets/burgruine-neideck.jpg';
+
+const wohnungen = await getWohnungen();
+const posts = (await getPublishedNews()).slice(0, 3);
+const feed = getFeedItems(8);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: Astro.site?.href,
+    inLanguage: SITE.lang,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: SITE.name,
+    description: SITE.description,
+    url: Astro.site?.href,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: SITE.town,
+      postalCode: SITE.postalCode,
+      addressRegion: 'Bayern',
+      addressCountry: SITE.country,
+    },
+    containsPlace: wohnungen.map((w) => ({
+      '@type': 'Apartment',
+      name: w.data.title,
+      url: new URL(`/ferienwohnungen/${w.id}/`, Astro.site).href,
+      ...(w.data.personen && {
+        occupancy: { '@type': 'QuantitativeValue', maxValue: w.data.personen },
+      }),
+    })),
+  },
+];
+---
+
+<Base jsonLd={jsonLd}>
+  <section class="hero">
+    <Picture
+      src={heroImg}
+      alt="Burgruine Neideck über dem Wiesenttal bei Ebermannstadt"
+      class="hero__img"
+      widths={[640, 1024, 1600, 1920]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="container hero__inner">
+      <p class="hero__kicker">{SITE.town} · {SITE.region}</p>
+      <h1>Ferienwohnungen in Ebermannstadt – mitten in der Fränkischen Schweiz</h1>
+      <p class="lead">
+        Zwei liebevoll eingerichtete Ferienwohnungen als Ausgangspunkt für Wandern, Klettern, Radfahren und
+        Genießen. Dazu immer aktuell: News, Feste und Ausflugstipps aus der Region.
+      </p>
+      <div class="hero__actions">
+        <a class="btn" href="/ferienwohnungen/">Ferienwohnungen ansehen</a>
+        <a class="btn btn--ghost" href="/kontakt/">Anfrage senden</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2>Unsere Ferienwohnungen</h2>
+        <a href="/ferienwohnungen/">Alle Details →</a>
+      </div>
+      <div class="grid grid--2">
+        {wohnungen.map((w) => <WohnungCard wohnung={w} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container news-layout">
+      <div>
+        <div class="section__head">
+          <h2>Tipps & Neuigkeiten</h2>
+          <a href="/news/">Alle Beiträge →</a>
+        </div>
+        <div class="grid">
+          {posts.map((p) => <NewsCard post={p} />)}
+        </div>
+      </div>
+      <aside aria-labelledby="region-news">
+        <div class="section__head">
+          <h2 id="region-news">Aus der Region</h2>
+        </div>
+        <FeedList items={feed} />
+        <p class="meta">Schlagzeilen externer Quellen, automatisch aktualisiert.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container prose">
+      <h2>Urlaub in der Fränkischen Schweiz</h2>
+      <p>
+        Ebermannstadt liegt im Wiesenttal in der Fränkischen Schweiz – zwischen Bamberg, Bayreuth und
+        Nürnberg. Felsen, Burgen und Höhlen, zahlreiche kleine Brauereien und ein dichtes Netz an Wander- und
+        Radwegen machen die Region zu einem der schönsten Ferienziele in Bayern.
+      </p>
+      <p>
+        Von unseren Ferienwohnungen aus erreichen Sie viele Ausflugsziele in wenigen Minuten.
+        In unseren <a href="/news/">News & Tipps</a> stellen wir regelmäßig Wanderungen, Feste und Sehenswürdigkeiten vor.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: min(78vh, 640px);
+    display: flex;
+    align-items: flex-end;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .hero :global(.hero__img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(20 35 27 / 0.1) 20%, rgb(20 35 27 / 0.75) 100%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 96px;
+    padding-bottom: 48px;
+  }
+
+  .hero h1 {
+    color: #fff;
+    max-width: 20ch;
+    text-shadow: 0 2px 16px rgb(0 0 0 / 0.35);
+  }
+
+  .hero .lead {
+    color: #eef3ef;
+  }
+
+  .hero__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    color: #f3d6b5;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .hero .btn--ghost {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .news-layout {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 960px) {
+    .news-layout {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+  }
+</style>

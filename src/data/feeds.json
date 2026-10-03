@@ -1,0 +1,50 @@
+{
+  "maxAgeDays": 30,
+  "maxItems": 40,
+  "keywords": [
+    "Fränkische Schweiz",
+    "Ebermannstadt",
+    "Forchheim",
+    "Wiesent",
+    "Pottenstein",
+    "Gößweinstein",
+    "Muggendorf",
+    "Streitberg",
+    "Behringersmühle",
+    "Tüchersfeld",
+    "Egloffstein",
+    "Pretzfeld",
+    "Kirchehrenbach",
+    "Walberla",
+    "Waischenfeld",
+    "Heiligenstadt",
+    "Hollfeld",
+    "Gräfenberg",
+    "Obertrubach",
+    "Weilersbach",
+    "Unterleinleiter",
+    "Neideck"
+  ],
+  "feeds": [
+    {
+      "name": "Google News: Fränkische Schweiz",
+      "url": "https://news.google.com/rss/search?q=%22Fr%C3%A4nkische+Schweiz%22+when:14d&hl=de&gl=DE&ceid=DE:de",
+      "filter": false
+    },
+    {
+      "name": "Google News: Ebermannstadt",
+      "url": "https://news.google.com/rss/search?q=Ebermannstadt+when:30d&hl=de&gl=DE&ceid=DE:de",
+      "filter": false
+    },
+    {
+      "name": "BR24 Franken",
+      "url": "https://www.br.de/nachrichten/franken,QNJ6rTt/rss",
+      "filter": true
+    },
+    {
+      "name": "inFranken Forchheim",
+      "url": "https://www.infranken.de/lk/forchheim/rss.xml",
+      "filter": true
+    }
+  ]
+}

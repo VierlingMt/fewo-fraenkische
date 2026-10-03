@@ -1,0 +1,161 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getWohnungen } from '../../lib/news';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const wohnungen = await getWohnungen();
+  return wohnungen.map((wohnung) => ({ params: { id: wohnung.id }, props: { wohnung } }));
+}
+
+const { wohnung } = Astro.props;
+const d = wohnung.data;
+const { Content } = await render(wohnung);
+
+const facts = [
+  d.personen && ['Personen', `bis ${d.personen}`],
+  d.schlafzimmer && ['Schlafzimmer', String(d.schlafzimmer)],
+  d.groesse && ['Größe', `${d.groesse} m²`],
+  ['Preis', d.preisAb ? `ab ${d.preisAb} € / Nacht` : 'auf Anfrage'],
+].filter(Boolean) as [string, string][];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Apartment',
+  name: `Ferienwohnung ${d.title}`,
+  description: d.teaser,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  ...(d.bild && { image: new URL(d.bild, Astro.site).href }),
+  ...(d.personen && { occupancy: { '@type': 'QuantitativeValue', maxValue: d.personen } }),
+  ...(d.schlafzimmer && { numberOfBedrooms: d.schlafzimmer }),
+  ...(d.groesse && { floorSize: { '@type': 'QuantitativeValue', value: d.groesse, unitCode: 'MTK' } }),
+  amenityFeature: d.ausstattung.map((name) => ({ '@type': 'LocationFeatureSpecification', name, value: true })),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.town,
+    postalCode: SITE.postalCode,
+    addressCountry: SITE.country,
+  },
+};
+---
+
+<Base title={`Ferienwohnung ${d.title}`} description={d.teaser} image={d.bild} jsonLd={jsonLd}>
+  <section class="section">
+    <div class="container">
+      <p class="meta"><a href="/ferienwohnungen/">Ferienwohnungen</a> / {d.title}</p>
+      <h1>Ferienwohnung {d.title}</h1>
+      <p class="lead">{d.teaser}</p>
+
+      <div class="layout">
+        <div>
+          {
+            d.bild ? (
+              <img class="hero-img" src={d.bild} alt={d.bildAlt ?? d.title} width="1200" height="800" />
+            ) : (
+              <div class="placeholder-img hero-img">Fotos folgen</div>
+            )
+          }
+          <div class="prose">
+            <Content />
+          </div>
+        </div>
+
+        <aside class="card facts">
+          <div class="card__body">
+            <h2>Auf einen Blick</h2>
+            <dl>
+              {
+                facts.map(([k, v]) => (
+                  <>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </>
+                ))
+              }
+            </dl>
+            {
+              d.ausstattung.length > 0 && (
+                <>
+                  <h3>Ausstattung</h3>
+                  <ul class="amenities">
+                    {d.ausstattung.map((a) => (
+                      <li>{a}</li>
+                    ))}
+                  </ul>
+                </>
+              )
+            }
+            <div class="actions">
+              <a class="btn" href="/kontakt/">Jetzt anfragen</a>
+              {
+                d.bookingUrl && (
+                  <a class="btn btn--ghost" href={d.bookingUrl} target="_blank" rel="noopener">
+                    Auf Booking.com buchen
+                  </a>
+                )
+              }
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    gap: 32px;
+    margin-top: 24px;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+
+    .facts {
+      position: sticky;
+      top: 96px;
+    }
+  }
+
+  .hero-img {
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+  }
+
+  .facts h2 {
+    font-size: 1.3rem;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    margin: 0 0 12px;
+  }
+
+  dt {
+    color: var(--c-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .amenities {
+    margin: 0 0 12px;
+    padding-left: 1.2em;
+  }
+</style>
