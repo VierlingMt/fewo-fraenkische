@@ -1,5 +1,5 @@
 # Baut die Website (Astro) und lädt sie per FTPS auf den Server bei All-Inkl.
-# Zielordner: /www-neu/ (neu.fewo-ebermannstadt.de), überschreibbar per Repo-Variable FTP_SERVER_DIR.
+# Zielordner: /www/ (www.fewo-fraenkische.de und www.fewo-ebermannstadt.de), überschreibbar per Repo-Variable FTP_SERVER_DIR.
 # Läuft bei jedem Push, manuell und mehrmals täglich (aktualisiert die Regional-News).
 name: Deploy (FTP)
 
@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '/www-neu/' }}
+  SERVER_DIR: ${{ vars.FTP_SERVER_DIR || '/www/' }}
 
 concurrency:
   group: deploy
@@ -36,7 +36,7 @@ jobs:
       - name: Zielordner prüfen
         run: |
           if [[ "$SERVER_DIR" != */ ]]; then
-            echo "::error::Zielordner muss mit / enden, z. B. /www-neu/"
+            echo "::error::Zielordner muss mit / enden, z. B. /www/"
             exit 1
           fi
           echo "Ziel: $SERVER_DIR"

@@ -29,10 +29,7 @@ npm run build  # fertige Seite in dist/
 
 ## Deploy
 
-`.github/workflows/deploy.yml` baut die Seite und lädt `dist/` nach `/www-neu/` (neu.fewo-ebermannstadt.de).
+`.github/workflows/deploy.yml` baut die Seite und lädt `dist/` nach `/www/` (www.fewo-fraenkische.de, www.fewo-ebermannstadt.de leitet weiter).
 Benötigte Secrets sind `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD`.
 
-Beim Go-live:
-1. `noindex: false` in `src/config.ts` setzen.
-2. Die endgültige Domain in `astro.config.mjs` (`site`) und `public/admin/config.yml` (`site_url`) eintragen.
-3. Im KAS die Domain auf `/www-neu/` umstellen.
+Die alte Joomla-Seite liegt gesperrt in `/www-old/` (Go-live am 03.10.2026 per `ftp-switch.yml`).
