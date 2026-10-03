@@ -36,6 +36,12 @@ const eintrag = z.object({
   url: z.url().optional(),
   // Suchbegriff für Google Maps; false = kein Kartenlink. Standard: "Name, Ort"
   maps: z.union([z.string(), z.literal(false)]).optional(),
+  // Bild aus src/assets/region/ mit Bildnachweis (bei fremden Fotos Pflicht)
+  bild: z.string().optional(),
+  bildAutor: z.string().optional(),
+  bildLizenz: z.string().optional(),
+  bildLizenzUrl: z.url().optional(),
+  bildQuelle: z.url().optional(),
 });
 
 const region = defineCollection({

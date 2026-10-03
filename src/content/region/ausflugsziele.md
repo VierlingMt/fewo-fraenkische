@@ -10,6 +10,7 @@ eintraege:
     text: Das Wahrzeichen der Fränkischen Schweiz. Schon in der Romantik haben Dichter und Maler die Ruine beschrieben und gemalt. Vom Neideckturm blicken Sie weit über das Wiesenttal bis hinüber zur Ruine Streitburg. Gelegentlich finden hier Theateraufführungen statt.
     url: https://www.wiesenttal.de
     maps: "Burgruine Neideck, Wiesenttal"
+    bild: neideck.jpg
   - name: Binghöhle Streitberg
     ort: Schauertal, 91346 Streitberg
     text: Eine der schönsten Tropfstein-Galeriehöhlen Deutschlands – ein Erlebnis bei jedem Wetter.

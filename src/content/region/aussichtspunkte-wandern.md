@@ -23,6 +23,7 @@ eintraege:
     ort: 91346 Wiesenttal
     text: Das Wahrzeichen der Fränkischen Schweiz mit herrlichem Blick vom Neideckturm über das Wiesenttal und zur gegenüberliegenden Ruine Streitburg.
     maps: "Burgruine Neideck, Wiesenttal"
+    bild: neideck.jpg
 ---
 
 Die Fränkische Schweiz ist ein Wanderparadies: Mehr als 4.500 Kilometer markierte Wanderwege führen durch
